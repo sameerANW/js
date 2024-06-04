@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ascending/Descending Order</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f4f4f4;
+    }
+    .container {
+        text-align: center;
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+    input[type="text"] {
+        padding: 12px;
+        width: 300px;
+        margin-bottom: 20px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        outline: none;
+    }
+    button {
+        padding: 12px 24px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 8px;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        margin-bottom: 10px;
+    }
+    button:hover {
+        background-color: #0056b3;
+    }
+    #output {
+        margin-top: 20px;
+        font-size: 18px;
+        text-align: left;
+        padding: 20px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        width: 100%;
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+        background-color: #ff9999; /* Red background color */
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        border-radius: 8px;
+    }
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .continue-link {
+        color: #007bff;
+        cursor: pointer;
+    }
+    .continue-link:hover {
+        text-decoration: underline;
+    }
+</style>
+</head>
+<body>
+<div class="container" style="background-color: #ffffff;">
+    <h2 style="color: #007bff;">Enter numbers or alphabets separated by space and click the button to sort them</h2>
+    <input type="text" id="numInput" placeholder="Enter items...">
+    <br>
+    <button onclick="sortAscending()" data-tooltip="Sort Ascending">Sort Ascending</button>
+    <button onclick="sortDescending()" data-tooltip="Sort Descending">Sort Descending</button>
+    <button class="reset" onclick="resetInput()" data-tooltip="Reset">Reset</button>
+    <br>
+    <div id="output"></div>
+</div>
+
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p>Please provide either numbers or alphabets, not both.</p>
+        <p><span class="continue-link" onclick="continueInput()">Continue</span></p>
+    </div>
+</div>
+
+<script>
+    var modal = document.getElementById("myModal");
+
+    function showModal() {
+        modal.style.display = "block";
+    }
+
+    function closeModal() {
+        modal.style.display = "none";
+    }
+
+    function continueInput() {
+        closeModal();
+        document.getElementById("numInput").value = "";
+        document.getElementById("numInput").focus();
+    }
+
+    function sortAscending() {
+        var input = document.getElementById("numInput").value.trim();
+        if (input === "") {
+            showModal();
+            return;
+        }
+        var items = input.split(" ");
+        var numbers = [];
+        var alphabets = [];
+        for (var i = 0; i < items.length; i++) {
+            if (!isNaN(items[i])) {
+                numbers.push(parseFloat(items[i]));
+            } else {
+                alphabets.push(items[i]);
+            }
+        }
+        if (numbers.length > 0 && alphabets.length > 0) {
+            showModal();
+            return;
+        }
+        numbers.sort(function(a, b){return a - b});
+        alphabets.sort();
+        var result = "Ascending Order: ";
+        if (numbers.length > 0) {
+            result += "Numbers: " + numbers.join(", ");
+        }
+        if (alphabets.length > 0) {
+            result += " | Alphabets: " + alphabets.join(", ");
+        }
+        document.getElementById("output").innerHTML = result;
+    }
+
+    function sortDescending() {
+        var input = document.getElementById("numInput").value.trim();
+        if (input === "") {
+            showModal();
+            return;
+        }
+        var items = input.split(" ");
+        var numbers = [];
+        var alphabets = [];
+        for (var i = 0; i < items.length; i++) {
+            if (!isNaN(items[i])) {
+                numbers.push(parseFloat(items[i]));
+            } else {
+                alphabets.push(items[i]);
+            }
+        }
+        if (numbers.length > 0 && alphabets.length > 0) {
+            showModal();
+            return;
+        }
+        numbers.sort(function(a, b){return b - a});
+        alphabets.sort().reverse();
+        var result = "Descending Order: ";
+        if (numbers.length > 0) {
+            result += "Numbers: " + numbers.join(", ");
+        }
+        if (alphabets.length > 0) {
+            result += " | Alphabets: " + alphabets.join(", ");
+        }
+        document.getElementById("output").innerHTML = result;
+    }
+
+    function resetInput() {
+        document.getElementById("numInput").value = "";
+        document.getElementById("output").innerHTML = "";
+    }
+</script>
+</body>
+</html>
